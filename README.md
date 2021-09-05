@@ -1,7 +1,7 @@
 # Log Grapher
 Just a small utility that parses log information into rust structs, and then uses that to draw a graph:
 
-```sh
+```
 $ cargo build --release
 
 $ ./target/release/log-grapher --help
