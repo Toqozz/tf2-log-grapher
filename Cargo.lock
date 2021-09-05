@@ -593,6 +593,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "log-grapher"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "font-kit",
+ "getopts",
+ "lazy_static",
+ "raqote",
+ "regex",
+ "reqwest",
+ "zip",
+]
+
+[[package]]
 name = "lyon_geom"
 version = "0.15.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -889,20 +903,6 @@ dependencies = [
  "png",
  "sw-composite",
  "typed-arena",
-]
-
-[[package]]
-name = "readlogs"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "font-kit",
- "getopts",
- "lazy_static",
- "raqote",
- "regex",
- "reqwest",
- "zip",
 ]
 
 [[package]]

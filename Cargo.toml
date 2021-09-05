@@ -1,5 +1,5 @@
 [package]
-name = "readlogs"
+name = "log-grapher"
 version = "0.1.0"
 authors = ["Toqoz <toqoz@hotmail.com>"]
 edition = "2018"
