@@ -47,27 +47,33 @@ const STROKE_STYLE_BASELINE: StrokeStyle = StrokeStyle {
     dash_offset: 0.,
 };
 
-// const BG_COLOR: SolidSource = SolidSource { r:, g:, b:, a: };
-// const FG_COLOR: SolidSource = SolidSource { r:, g:, b:, a: };
-// const DAMAGE_COLOR: SolidSource = SolidSource { r:, g:, b:, a: };
-// const HEAL_COLOR: SolidSource = SolidSource { r:, g:, b:, a: };
-// const HEADSHOT_BACKSTAB_COLOR: SolidSource = SolidSource { r:, g:, b:, a: };
-// const AIRSHOT_COLOR: SolidSource = SolidSource { r:, g:, b:, a: };
-// const SHOT_HIT_COLOR: SolidSource = SolidSource { r:, g:, b:, a: };
-// const MEDIC_KILL_COLOR: SolidSource = SolidSource { r:, g:, b:, a: };
-// const MEDIC_DROP_COLOR: SolidSource = SolidSource { r:, g:, b:, a: };
+/*
+Courtney scheme.
+const BG_COLOR: SolidSource = SolidSource { r: 21, g: 25, b: 39, a: 255 };
+const FG_COLOR: SolidSource = SolidSource { r: 69, g: 75, b: 94, a: 255 };
+const DAMAGE_COLOR: SolidSource = SolidSource { r: 126, g: 134, b: 160, a: 255 };
+const KILL_COLOR: SolidSource = SolidSource { r: 184, g: 189, b: 204, a: 255 };
+const HEADSHOT_BACKSTAB_REFLECT_COLOR: SolidSource = SolidSource { r: 235, g: 253, b: 175, a: 255 };
+const AIRSHOT_COLOR: SolidSource = SolidSource { r: 184, g: 239, b: 6, a: 255 };
+const SHOT_HIT_COLOR: SolidSource = SolidSource { r: 156, g: 149, b: 220, a: 255 };
+const MEDIC_KILL_COLOR: SolidSource = SolidSource { r: 255, g: 180, b: 153, a: 255 };
+const MEDIC_DROP_COLOR: SolidSource = SolidSource { r: 255, g: 31, b: 87, a: 255 };
+const HEAL_COLOR: SolidSource = SolidSource { r: 112, g: 188, b: 109, a: 255 };
+const DEATH_COLOR: SolidSource = SolidSource { r: 183, g: 22, b: 51, a: 255 };
+*/
 
-const GRUVBOX_BG: SolidSource = SolidSource { r: 40, g: 40, b: 40, a: 255 };
-const GRUVBOX_FG: SolidSource = SolidSource { r: 235, g: 219, b: 178, a: 255 };
-const GRUVBOX_RED: SolidSource = SolidSource { r: 251, g: 73, b: 52, a: 255 };
-const GRUVBOX_GREEN: SolidSource = SolidSource { r: 184, g: 187, b: 38, a: 255 };
-const GRUVBOX_YELLOW: SolidSource = SolidSource { r: 250, g: 189, b: 47, a: 255 };
-const GRUVBOX_BLUE: SolidSource = SolidSource { r: 131, g: 165, b: 152, a: 255 };
-const GRUVBOX_PURPLE: SolidSource = SolidSource { r: 211, g: 134, b: 155, a: 255 };
-const GRUVBOX_AQUA: SolidSource = SolidSource { r: 142, g: 192, b: 124, a: 255 };
-const GREEN: SolidSource = SolidSource { r: 90, g: 120, b: 25, a: 255 };
-//const GREEN_ALT: SolidSource = SolidSource { r: 120, g: 140, b: 130, a: 255 };
-const GRUVBOX_GRAY: SolidSource = SolidSource { r: 110, g: 110, b: 110, a: 255 };
+//const BG_COLOR: SolidSource = SolidSource { r: 41, g: 40, b: 40, a: 255 };
+const BG_COLOR: SolidSource = SolidSource { r: 24, g: 26, b: 32, a: 255 };
+const FG_COLOR: SolidSource = SolidSource { r: 212, g: 190, b: 152, a: 255 };
+const DAMAGE_COLOR: SolidSource = SolidSource { r: 90, g: 82, b: 76, a: 255 };
+const KILL_COLOR: SolidSource = SolidSource { r: 169, g: 182, b: 101, a: 255 };
+const HEADSHOT_BACKSTAB_REFLECT_COLOR: SolidSource = SolidSource { r: 216, g: 166, b: 87, a: 255 };
+const AIRSHOT_COLOR: SolidSource = SolidSource { r: 125, g: 174, b: 163, a: 255 };
+const SHOT_HIT_COLOR: SolidSource = SolidSource { r: 105, g: 98, b: 92, a: 255 };
+const MEDIC_KILL_COLOR: SolidSource = SolidSource { r: 211, g: 134, b: 155, a: 255 };
+const MEDIC_DROP_COLOR: SolidSource = SolidSource { r: 180, g: 65, b: 96, a: 255 };
+const HEAL_COLOR: SolidSource = SolidSource { r: 137, g: 180, b: 130, a: 255 };
+const DEATH_COLOR: SolidSource = SolidSource { r: 234, g: 105, b: 98, a: 255 };
 
 const DAMAGE_MULTIPLIER: f32 = 1.0;
 const HEAL_MULTIPLIER: f32 = 1.0;
@@ -172,7 +178,7 @@ pub fn draw_graph(filtered: &FilteredEvents, players: &Vec<Player>, batching: i6
         .load().unwrap();
 
     let mut dt = DrawTarget::new(REAL_WIDTH as i32, REAL_HEIGHT as i32);
-    dt.clear(GRUVBOX_BG);
+    dt.clear(BG_COLOR);
 
     // Demo starts recording 5 seconsd before game start.
     let start = &filtered.events.first().unwrap().timestamp - 5;
@@ -202,60 +208,59 @@ pub fn draw_graph(filtered: &FilteredEvents, players: &Vec<Player>, batching: i6
         for ev in buffer {
             match ev.event {
                 EventType::Damage(damage) => {
+                    let dmg = damage.damage as f32 * DAMAGE_MULTIPLIER;
                     if damage.attacker == player_id {
-                    	let dmg = damage.damage as f32 * DAMAGE_MULTIPLIER;
-                        lines.add_positive(x, dmg, false, GRUVBOX_GRAY);
+                        lines.add_positive(x, dmg, false, DAMAGE_COLOR);
                         score += dmg;
 
                         if damage.headshot {
-                            lines.add_positive(x, HEADSHOT_VALUE, true, GRUVBOX_AQUA);
+                            lines.add_positive(x, HEADSHOT_VALUE, true, HEADSHOT_BACKSTAB_REFLECT_COLOR);
                             score += HEADSHOT_VALUE;
                         }
 
                         if damage.airshot {
-                            lines.add_positive(x, AIRSHOT_VALUE, true, GRUVBOX_YELLOW);
+                            lines.add_positive(x, AIRSHOT_VALUE, true, AIRSHOT_COLOR);
                             score += AIRSHOT_VALUE;
                         }
                     } else if damage.victim == player_id {
-                        let dmg = damage.damage as f32 * DAMAGE_MULTIPLIER;
-                        lines.add_negative(x, dmg, false, GRUVBOX_GRAY);
+                        lines.add_negative(x, dmg, false, DAMAGE_COLOR);
                     }
                 },
                 EventType::Heal(heal) => {
                     let healing = heal.healing as f32 * HEAL_MULTIPLIER;
                     if heal.healer == player_id {
-                        lines.add_positive(x, healing, false, GREEN);
+                        lines.add_positive(x, healing, false, HEAL_COLOR);
                     } else if heal.target == player_id {
-                        lines.add_negative(x, healing, false, GREEN)
+                        lines.add_negative(x, healing, false, HEAL_COLOR)
                     }
                 }
                 EventType::Kill(kill) => {
                     if kill.attacker == player_id {
-                        lines.add_positive(x, KILL_VALUE, true, GRUVBOX_GREEN);
-                        score += KILL_VALUE;
-
                         // We don't care about headshot kills because it is already captured by the damage.
                         if kill.weapon.starts_with("deflect") || kill.backstab {
-                            lines.add_positive(x, HEADSHOT_BACKSTAB_REFLECT_KILL_VALUE, true, GRUVBOX_AQUA);
+                            lines.add_positive(x, HEADSHOT_BACKSTAB_REFLECT_KILL_VALUE, true, HEADSHOT_BACKSTAB_REFLECT_COLOR);
                             score += HEADSHOT_BACKSTAB_REFLECT_KILL_VALUE;
                         }
+
+                        lines.add_positive(x, KILL_VALUE, true, KILL_COLOR);
+                        score += KILL_VALUE;
                     } else if kill.victim == player_id {
-                        lines.add_negative(x, DEATH_VALUE, true, GRUVBOX_RED);
+                        lines.add_negative(x, DEATH_VALUE, true, DEATH_COLOR);
                     }
                 },
                 EventType::Hit(_hit) => {
-                    lines.add_positive(x, HIT_VALUE, false, GRUVBOX_BLUE);
+                    lines.add_positive(x, HIT_VALUE, false, SHOT_HIT_COLOR);
                     score += HIT_VALUE;
                 }
                 EventType::MedicDeath(md) => {
                     if md.attacker == player_id {
                         if md.drop {
-                            lines.add_positive(x, MEDIC_DROP_VALUE, true, GRUVBOX_PURPLE);
+                            lines.add_positive(x, MEDIC_DROP_VALUE, true, MEDIC_DROP_COLOR);
                         } else {
-                            lines.add_positive(x, MEDIC_KILL_VALUE, true, GRUVBOX_PURPLE);
+                            lines.add_positive(x, MEDIC_KILL_VALUE, true, MEDIC_KILL_COLOR);
                         }
                     } else if md.victim == player_id && md.drop {
-                        lines.add_negative(x, MEDIC_DROP_VALUE, true, GRUVBOX_PURPLE);
+                        lines.add_negative(x, MEDIC_DROP_VALUE, true, MEDIC_DROP_COLOR);
                     }
                 }
                 _ => (),
@@ -281,7 +286,7 @@ pub fn draw_graph(filtered: &FilteredEvents, players: &Vec<Player>, batching: i6
             14.0,
             &idx.to_string(),
             Point::new(*x, HEIGHT - 20.0),
-            &Source::Solid(GRUVBOX_FG),
+            &Source::Solid(FG_COLOR),
             &DRAW_OPTIONS_TEXT
         );
 
@@ -293,27 +298,27 @@ pub fn draw_graph(filtered: &FilteredEvents, players: &Vec<Player>, batching: i6
     writeln!(&mut highlights).unwrap();
 
     // Draw key.
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 10.0, 60.0, REAL_HEIGHT - 10.0, GRUVBOX_GRAY);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 20.0, 60.0, REAL_HEIGHT - 20.0, GRUVBOX_BLUE);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 30.0, 60.0, REAL_HEIGHT - 30.0, GRUVBOX_AQUA);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 40.0, 60.0, REAL_HEIGHT - 40.0, GRUVBOX_YELLOW);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 50.0, 60.0, REAL_HEIGHT - 50.0, GRUVBOX_GREEN);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 60.0, 60.0, REAL_HEIGHT - 60.0, GRUVBOX_PURPLE);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 70.0, 60.0, REAL_HEIGHT - 70.0, GRUVBOX_RED);
-    dt.draw_text(&font, 14.0, "damage", Point::new(70.0, REAL_HEIGHT - 5.0), &Source::Solid(GRUVBOX_FG), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "shot_hit", Point::new(70.0, REAL_HEIGHT - 15.0), &Source::Solid(GRUVBOX_FG), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "headshot/backstab", Point::new(70.0, REAL_HEIGHT - 25.0), &Source::Solid(GRUVBOX_FG), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "airshot", Point::new(70.0, REAL_HEIGHT - 35.0), &Source::Solid(GRUVBOX_FG), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "kill", Point::new(70.0, REAL_HEIGHT - 45.0), &Source::Solid(GRUVBOX_FG), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "shot_missed", Point::new(70.0, REAL_HEIGHT - 55.0), &Source::Solid(GRUVBOX_FG), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "death", Point::new(70.0, REAL_HEIGHT - 65.0), &Source::Solid(GRUVBOX_FG), &DRAW_OPTIONS_TEXT);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 10.0, 60.0, REAL_HEIGHT - 10.0, DAMAGE_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 20.0, 60.0, REAL_HEIGHT - 20.0, HEADSHOT_BACKSTAB_REFLECT_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 30.0, 60.0, REAL_HEIGHT - 30.0, AIRSHOT_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 40.0, 60.0, REAL_HEIGHT - 40.0, KILL_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 50.0, 60.0, REAL_HEIGHT - 50.0, MEDIC_KILL_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 60.0, 60.0, REAL_HEIGHT - 60.0, MEDIC_DROP_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 70.0, 60.0, REAL_HEIGHT - 70.0, DEATH_COLOR);
+    dt.draw_text(&font, 14.0, "damage", Point::new(70.0, REAL_HEIGHT - 5.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "headshot/backstab/reflect", Point::new(70.0, REAL_HEIGHT - 15.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "airshot", Point::new(70.0, REAL_HEIGHT - 25.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "kill", Point::new(70.0, REAL_HEIGHT - 35.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "medic_kill", Point::new(70.0, REAL_HEIGHT - 45.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "medic_drop", Point::new(70.0, REAL_HEIGHT - 55.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "death", Point::new(70.0, REAL_HEIGHT - 65.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
 
     dt.draw_text(
         &font,
         14.0,
         &format!("Player: {}, batching: {}s, scale: {:.2}", &filtered.player.name, batching, lines.global_y_scale),
         Point::new(300.0, REAL_HEIGHT - 10.0),
-        &Source::Solid(GRUVBOX_FG),
+        &Source::Solid(FG_COLOR),
         &DRAW_OPTIONS_TEXT
     );
 
@@ -323,7 +328,7 @@ pub fn draw_graph(filtered: &FilteredEvents, players: &Vec<Player>, batching: i6
     let path = pb.finish();
     dt.stroke(
         &path,
-        &Source::Solid(GRUVBOX_FG),
+        &Source::Solid(FG_COLOR),
         &STROKE_STYLE_BASELINE,
         &DRAW_OPTIONS
     );
