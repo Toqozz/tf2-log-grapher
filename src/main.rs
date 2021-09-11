@@ -154,7 +154,7 @@ fn main() -> Result<(), &'static str> {
                             .iter()
                             .find(|e| {
                                 match &identifier {
-                                    Identifier::Alias(name) => &e.player.name == name,
+                                    Identifier::Alias(name) => e.player.name.starts_with(name),     // partial matching for aliases is allowed
                                     Identifier::SteamID(steamid) => &e.player.id == steamid,
                                 }
                             });
