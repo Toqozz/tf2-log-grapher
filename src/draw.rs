@@ -11,9 +11,9 @@ use crate::events::*;
 use crate::Player;
 
 const REAL_WIDTH: f32 = 1280.0;
-const KEY_SPACE: f32 = 70.0;
+const KEY_SPACE: f32 = 80.0;
 const REAL_HEIGHT: f32 = 720.0;
-const HEIGHT: f32 = REAL_HEIGHT - KEY_SPACE;
+const HEIGHT: f32 = REAL_HEIGHT - KEY_SPACE - 10.0;
 const LINE_PADDING: f32 = 10.0;
 
 // Same as default, but no anti-aliasing.
@@ -299,19 +299,21 @@ pub fn draw_graph(filtered: &FilteredEvents, players: &Vec<Player>, batching: i6
 
     // Draw key.
     draw_line(&mut dt, 20.0, REAL_HEIGHT - 10.0, 60.0, REAL_HEIGHT - 10.0, DAMAGE_COLOR);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 20.0, 60.0, REAL_HEIGHT - 20.0, HEADSHOT_BACKSTAB_REFLECT_COLOR);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 30.0, 60.0, REAL_HEIGHT - 30.0, AIRSHOT_COLOR);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 40.0, 60.0, REAL_HEIGHT - 40.0, KILL_COLOR);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 50.0, 60.0, REAL_HEIGHT - 50.0, MEDIC_KILL_COLOR);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 60.0, 60.0, REAL_HEIGHT - 60.0, MEDIC_DROP_COLOR);
-    draw_line(&mut dt, 20.0, REAL_HEIGHT - 70.0, 60.0, REAL_HEIGHT - 70.0, DEATH_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 20.0, 60.0, REAL_HEIGHT - 20.0, HEAL_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 30.0, 60.0, REAL_HEIGHT - 30.0, HEADSHOT_BACKSTAB_REFLECT_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 40.0, 60.0, REAL_HEIGHT - 40.0, AIRSHOT_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 50.0, 60.0, REAL_HEIGHT - 50.0, KILL_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 60.0, 60.0, REAL_HEIGHT - 60.0, MEDIC_KILL_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 70.0, 60.0, REAL_HEIGHT - 70.0, MEDIC_DROP_COLOR);
+    draw_line(&mut dt, 20.0, REAL_HEIGHT - 80.0, 60.0, REAL_HEIGHT - 80.0, DEATH_COLOR);
     dt.draw_text(&font, 14.0, "damage", Point::new(70.0, REAL_HEIGHT - 5.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "headshot/backstab/reflect", Point::new(70.0, REAL_HEIGHT - 15.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "airshot", Point::new(70.0, REAL_HEIGHT - 25.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "kill", Point::new(70.0, REAL_HEIGHT - 35.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "medic_kill", Point::new(70.0, REAL_HEIGHT - 45.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "medic_drop", Point::new(70.0, REAL_HEIGHT - 55.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
-    dt.draw_text(&font, 14.0, "death", Point::new(70.0, REAL_HEIGHT - 65.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "healing", Point::new(70.0, REAL_HEIGHT - 15.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "headshot/backstab/reflect", Point::new(70.0, REAL_HEIGHT - 25.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "airshot", Point::new(70.0, REAL_HEIGHT - 35.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "kill", Point::new(70.0, REAL_HEIGHT - 45.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "medic_kill", Point::new(70.0, REAL_HEIGHT - 55.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "medic_drop", Point::new(70.0, REAL_HEIGHT - 65.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
+    dt.draw_text(&font, 14.0, "death", Point::new(70.0, REAL_HEIGHT - 75.0), &Source::Solid(FG_COLOR), &DRAW_OPTIONS_TEXT);
 
     dt.draw_text(
         &font,
